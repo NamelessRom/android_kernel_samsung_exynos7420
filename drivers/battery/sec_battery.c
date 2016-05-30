@@ -291,6 +291,15 @@ static int sec_bat_set_charge(
 	battery->temp_low_cnt = 0;
 	battery->temp_recover_cnt = 0;
 
+	/* Set siop_level to 70 when charging */
+	if (val.intval == POWER_SUPPLY_TYPE_MAINS) {
+		union power_supply_propval value;
+
+		value.intval = 70;
+		psy_do_property(battery->pdata->charger_name, set,
+			POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN, value);
+	}
+
 	psy_do_property(battery->pdata->charger_name, set,
 		POWER_SUPPLY_PROP_ONLINE, val);
 
